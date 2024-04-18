@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zebra Print Test</title>
-    <script src="BrowserPrint-3.1.250.min.js"></script> <!-- Update the source with your actual filename -->
+    <script src="BrowserPrint-3.1.250.min.js"></script>
     <script>
         var selected_device;
 
@@ -27,10 +27,20 @@
                 return;
             }
 
+            var numLabels = document.getElementById('numLabels').value;
+            numLabels = parseInt(numLabels, 10);  // Convert to integer
+
+            if (isNaN(numLabels) || numLabels < 1) {
+                alert("Please enter a valid number of labels.");
+                return;
+            }
+
             // ZPL Command for a simple label
             var zplData = "^XA^FO50,50^A0N50,50^FDHello, Zebra!^FS^XZ";
 
-            selected_device.send(zplData, undefined, errorCallback);
+            for (var i = 0; i < numLabels; i++) {
+                selected_device.send(zplData, undefined, errorCallback);
+            }
         }
 
         function errorCallback(error) {
@@ -43,6 +53,7 @@
 </head>
 <body>
     <h1>Zebra Browser Print Test</h1>
+    <input type="number" id="numLabels" value="1" min="1" style="margin-right: 10px;">
     <button onclick="printLabel()">Test Print</button>
 </body>
 </html>
