@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
-const port = 3000; // You can choose any port number
 
 // Serve static files from the 'public' directory
 app.use(express.static('public'));
 
-app.listen(port, () => {
-    console.log(`Server is up and running...`);
-});
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port);
