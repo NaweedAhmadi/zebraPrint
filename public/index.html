@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zebra Print Test</title>
+    <script src="BrowserPrint-3.1.250.min.js"></script> <!-- Update the source with your actual filename -->
+    <script>
+        var selected_device;
+
+        function setup() {
+            // Look for Zebra printers
+            BrowserPrint.getDefaultDevice('printer', function(device) {
+                // Device found
+                selected_device = device;
+                console.log('Default printer: ' + device.name);
+            }, function(error) {
+                // Error finding device
+                console.error("Failed to find printer: " + error);
+                alert('Failed to find printer. Please check if Browser Print is running.');
+            });
+        }
+
+        function printLabel() {
+            if (!selected_device) {
+                alert("No printer selected.");
+                return;
+            }
+
+            // ZPL Command for a simple label
+            var zplData = "^XA^FO50,50^A0N50,50^FDHello, Zebra!^FS^XZ";
+
+            selected_device.send(zplData, undefined, errorCallback);
+        }
+
+        function errorCallback(error) {
+            console.error("Error Sending Data: " + error);
+            alert("Error Sending Data: " + error);
+        }
+
+        window.onload = setup;
+    </script>
+</head>
+<body>
+    <h1>Zebra Browser Print Test</h1>
+    <button onclick="printLabel()">Test Print</button>
+</body>
+</html>
